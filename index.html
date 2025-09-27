@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Loader Collection</title>
+    <style>
+      :root {
+        /* Dark Mode Colors (Default) */
+        --bg-primary: #0a0a0a;
+        --bg-secondary: #161616;
+        --bg-surface: #1e1e1e;
+        --bg-card: #222222;
+        --text-primary: #ffffff;
+        --text-secondary: #cccccc;
+        --text-muted: #999999;
+        --accent-primary: #f30000;
+        --accent-secondary: #f1c500;
+        --accent-success: #27ae60;
+        --border-color: #333333;
+        --hover-bg: #2a2a2a;
+        --shadow: rgba(0, 0, 0, 0.3);
+        --backdrop: #000000de;
+        --gradient-primary: linear-gradient(135deg, #f30000, #ff4444);
+        --gradient-secondary: linear-gradient(135deg, #f1c500, #ffd700);
+      }
+      .lightmode {
+        /* Light Mode Colors */
+        --bg-primary: #f9f9f9;
+        --bg-secondary: #ffffff;
+        --bg-surface: #f5f5f5;
+        --bg-card: #ffffff;
+        --text-primary: #0a0a0a;
+        --text-secondary: #333333;
+        --text-muted: #666666;
+        --accent-primary: #eb1b30;
+        --accent-secondary: #e5c100;
+        --accent-success: #27ae60;
+        --border-color: #adadad;
+        --hover-bg: #f0f0f0;
+        --shadow: rgba(0, 0, 0, 0.1);
+        --backdrop: rgba(255, 255, 255, 0.678);
+        --gradient-primary: linear-gradient(135deg, #eb1b30, #ff4444);
+        --gradient-secondary: linear-gradient(135deg, #e5c100, #ffd700);
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+      }
+      body {
+        overflow-x: hidden;
+        scrollbar-width: none;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+      }
+      .header {
+        text-align: center;
+        padding: 2rem;
+        background: var(--bg-secondary);
+        border-bottom: 2px solid var(--border-color);
+      }
+      .header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .header .subtitle {
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+      }
+      .info-section {
+        max-width: 1200px;
+        margin: 3rem auto;
+        padding: 0 2rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+      }
+      .info-card {
+        background: var(--bg-card);
+        border-radius: 15px;
+        padding: 2rem;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 8px 32px var(--shadow);
+        position: relative;
+        overflow: hidden;
+      }
+      .info-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--gradient-primary);
+      }
+      .info-card h3 {
+        color: var(--accent-primary);
+        margin-bottom: 1rem;
+        font-size: 1.4rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .info-card p {
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
+      }
+      .info-card ul {
+        list-style: none;
+        padding-left: 0;
+      }
+      .info-card li {
+        color: var(--text-secondary);
+        margin-bottom: 0.5rem;
+        padding-left: 1.5rem;
+        position: relative;
+      }
+      .info-card li::before {
+        content: "▸";
+        position: absolute;
+        left: 0;
+        color: var(--accent-secondary);
+        font-weight: bold;
+      }
+      .loader-showcase {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 3rem;
+        padding: 3rem 2rem;
+        background: var(--bg-surface);
+      }
+      .body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        position: relative;
+      }
+      .loader-title {
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+        text-align: center;
+      }
+      .loader {
+        background-color: var(--bg-card);
+        height: 375px;
+        max-width: 275px;
+        min-width: 275px;
+        border: 5px solid var(--border-color);
+        border-radius: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        align-items: center;
+        padding: 2rem;
+        color: var(--text-muted);
+        position: relative;
+        box-shadow: 0 1px 3px var(--shadow);
+        overflow: hidden;
+      }
+      
+      /* Copy Button Styles */
+      .copy-button {
+        position: absolute;
+        top: 15%;
+        right: 10%;
+        background: var(--accent-primary);
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: bold;
+        opacity: 0;
+        transition: all 0.3s ease;
+        z-index: 10;
+        box-shadow: 0 2px 8px var(--shadow);
+      }
+      
+      .body:hover .copy-button {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      
+      .copy-button:hover {
+        background: var(--accent-secondary);
+        transform: scale(1.05);
+      }
+      
+      .copy-button:active {
+        transform: scale(0.95);
+      }
+      
+      .copy-button.copied {
+        background: var(--accent-success);
+        animation: copySuccess 0.5s ease;
+      }
+      
+      @keyframes copySuccess {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+      }
+      
+      /* Notification Styles */
+      .notification {
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        background: var(--accent-success);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 8px;
+        font-weight: bold;
+        z-index: 1001;
+        transform: translateX(300px);
+        opacity: 0;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px var(--shadow);
+      }
+      
+      .notification.show {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      
+      .begin {
+        width: 70px;
+        height: 70px;
+        margin: 0 auto 2rem;
+        position: relative;
+      }
+      .start {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+      .top {
+        position: absolute;
+        top: 15px;
+        left: -5px;
+        width: 80px;
+        height: 6px;
+        background: var(--gradient-primary);
+        border-radius: 3px;
+        animation: slideBeam 4s ease infinite;
+      }
+      @keyframes slideBeam {
+        0%,
+        10%,
+        90%,
+        100% {
+          opacity: 0.3;
+          transform: scaleX(0.2);
+        }
+        40%,
+        60% {
+          opacity: 1;
+          transform: scaleX(1);
+        }
+      }
+      .left {
+        position: absolute;
+        background: var(--gradient-primary);
+        animation: sideBeam1 4s ease infinite;
+        width: 6px;
+        height: 60px;
+        border-radius: 3px;
+        left: 20px;
+        top: 19px;
+        transform-origin: top;
+      }
+      .bottom {
+        position: absolute;
+        top: 35px;
+        background: var(--gradient-primary);
+        animation: slideBeam1 4s ease infinite;
+        left: 5px;
+        width: 60px;
+        height: 6px;
+        border-radius: 3px;
+      }
+      @keyframes slideBeam1 {
+        0%,
+        20%,
+        80%,
+        100% {
+          transform: scaleX(0.2);
+          opacity: 0.3;
+        }
+        43%,
+        57% {
+          opacity: 1;
+          transform: scaleX(1);
+        }
+      }
+      @keyframes sideBeam1 {
+        0%,
+        30%,
+        70%,
+        100% {
+          transform: scaleY(0.2);
+          opacity: 0.3;
+        }
+        46%,
+        54% {
+          opacity: 1;
+          transform: scaleY(1);
+        }
+      }
+      @keyframes sideBeam2 {
+        0%,
+        40%,
+        60%,
+        100% {
+          transform: scaleY(0.2);
+          opacity: 0.3;
+        }
+        49%,
+        51% {
+          opacity: 1;
+          transform: scaleY(1);
+        }
+      }
+      .right {
+        position: absolute;
+        background: var(--gradient-primary);
+        animation: sideBeam2 4s ease infinite;
+        right: 20px;
+        top: 19px;
+        width: 6px;
+        height: 60px;
+        border-radius: 2px;
+        transform-origin: top;
+      }
+      .spinner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 70px;
+        max-width: 70px;
+        min-width: 70px;
+        border: 5px solid var(--border-color);
+        border-radius: 50%;
+        border-right: 5px solid var(--accent-primary);
+        animation: spin 1s linear infinite;
+      }
+      .spinner2 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 70px;
+        max-width: 70px;
+        min-width: 70px;
+        border: 5px solid var(--border-color);
+        border-radius: 50%;
+        border-right: 5px dashed var(--accent-primary);
+        animation: spin 1s linear infinite;
+      }
+      .spinner3 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 70px;
+        max-width: 70px;
+        min-width: 70px;
+        border: 5px solid var(--border-color);
+        border-radius: 50%;
+        border-right: 8px double var(--accent-primary);
+        animation: spin 1s linear infinite;
+      }
+      .spinner4 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 70px;
+        max-width: 70px;
+        min-width: 70px;
+        background-color: var(--bg-surface);
+        border: 5px solid var(--border-color);
+        border-radius: 10%;
+        animation: spin2 4s linear infinite;
+      }
+      .spinner5 {
+        padding: 5px;
+        margin-left: -23px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 120px;
+        max-width: 120px;
+        min-width: 120px;
+        background-color: var(--bg-surface);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      .base {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        border-left: 4px solid var(--accent-success);
+        border-right: 4px solid var(--accent-success);
+        position: absolute;
+        top: 90%;
+        height: 8px;
+        max-width: 50px;
+        min-width: 50px;
+        background-color: var(--border-color);
+        border-radius: 4px;
+        animation: paddleMove 4s linear infinite;
+      }
+      .player {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        position: absolute;
+        z-index: 10;
+        height: 12px;
+        max-width: 12px;
+        min-width: 12px;
+        background: var(--gradient-secondary);
+        border-radius: 50%;
+        animation: ballBounce 4s linear infinite;
+      }
+      .block1,
+      .block2 {
+        background: var(--accent-primary);
+        width: 15px;
+        height: 15px;
+        margin: 2px;
+        border-radius: 3px;
+        position: absolute;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+      .b2 {
+        top: 10%;
+        left: 10%;
+        animation: blockSlideIn2 4s linear infinite;
+      }
+      .b3 {
+        left: 77%;
+        top: 20%;
+        animation: blockSlideIn3 4s linear infinite;
+      }
+      .b4 {
+        left: 40%;
+        top: 50%;
+        animation: blockSlideIn4 4s linear infinite;
+      }
+      @keyframes blockSlideIn3 {
+        0%,
+        30% {
+          opacity: 0;
+        }
+        31%,
+        59% {
+          opacity: 1;
+        }
+        60% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
+      @keyframes blockSlideIn4 {
+        0%,
+        60% {
+          opacity: 0;
+        }
+        61%,
+        90% {
+          opacity: 1;
+        }
+        91%,
+        100% {
+          opacity: 0;
+        }
+      }
+      @keyframes blockSlideIn2 {
+        0%,
+        9% {
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        29% {
+          opacity: 1;
+        }
+        30% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 0;
+        }
+      }
+      .b1 {
+        animation: blockSlideIn1 4s linear infinite;
+      }
+      @keyframes blockSlideIn1 {
+        0%, 91%, 100%{
+          opacity: 1;
+          top: 40%;
+          left: 20%;
+        }
+        5% {
+          opacity: 1;
+          top: 40%;
+          left: 20%;
+        }
+        9% {
+          opacity: 1;
+          top: 40%;
+          left: 20%;
+        }
+        10% {
+          opacity: 0;
+          top: 40%;
+          left: 20%;
+        }
+        90% {
+          opacity: 0;
+          top: 40%;
+          left: 20%;
+        }
+      }
+      .pup {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        border: 3px solid var(--accent-success);
+        border-radius: 50%;
+        animation: powerup 4s linear infinite;
+        position: absolute;
+        z-index: 10;
+        height: 13px;
+        max-width: 13px;
+        min-width: 13px;
+      }
+      @keyframes ballBounce {
+        0%,
+        100% {
+          left: 10%;
+          top: 80%;
+        }
+        10% {
+          top: 50%;
+        }
+        20% {
+          top: 80%;
+          left: 55%;
+        }
+        30% {
+          top: 20%;
+          left: 10%;
+        }
+        35% {
+          top: 50%;
+          left: 0;
+        }
+        50% {
+          left: 50%;
+          top: 80%;
+        }
+        60% {
+          left: 77%;
+          top: 30%;
+        }
+        70% {
+          left: 90%;
+          top: 50%;
+        }
+        80% {
+          left: 70%;
+          top: 80%;
+        }
+        90% {
+          left: 40%;
+          top: 60%;
+        }
+      }
+      @keyframes paddleMove {
+        0%,
+        100% {
+          left: 0;
+        }
+        10% {
+          left: 35%;
+        }
+        20% {
+          left: 40%;
+        }
+        30% {
+          left: 3%;
+        }
+        35% {
+          left: 1%;
+        }
+        50% {
+          left: 44%;
+        }
+        60% {
+          left: 0;
+        }
+        70% {
+          left: 59%;
+        }
+        80% {
+          left: 53%;
+        }
+        90% {
+          left: 36%;
+        }
+      }
+      @keyframes powerup {
+        0%,
+        100% {
+          opacity: 0;
+          top: -200px;
+          left: 5px;
+        }
+        10% {
+          opacity: 1;
+          top: -20px;
+          left: 5px;
+        }
+        60% {
+          opacity: 1;
+          left: 5px;
+          top: 82%;
+        }
+        61% {
+          opacity: 0;
+          left: 5px;
+          top: 82%;
+        }
+      }
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @keyframes spin2 {
+        0%,
+        100% {
+          border-radius: 50%;
+          transform: rotate(0);
+          scale: 100%;
+          border-right: 5px solid var(--accent-primary);
+          border-left: 5px solid var(--border-color);
+          border-top: 5px solid var(--border-color);
+          border-bottom: 5px solid var(--border-color);
+        }
+        25% {
+          border-radius: 10%;
+          transform: rotate(360deg);
+          scale: 100%;
+          border-right: 5px solid var(--border-color);
+          border-left: 5px solid var(--border-color);
+          border-top: 5px solid var(--border-color);
+          border-bottom: 5px solid var(--accent-primary);
+        }
+        50% {
+          border-radius: 25%;
+          transform: rotate(0);
+          scale: 130%;
+          border-right: 5px solid var(--border-color);
+          border-left: 5px solid var(--accent-primary);
+          border-top: 5px solid var(--border-color);
+          border-bottom: 5px solid var(--border-color);
+        }
+        75% {
+          border-radius: -50%;
+          transform: rotate(-360deg);
+          scale: 100%;
+          border-right: 5px solid var(--border-color);
+          border-left: 5px solid var(--border-color);
+          border-top: 5px solid var(--accent-primary);
+          border-bottom: 5px solid var(--border-color);
+        }
+      }
+      p {
+        color: var(--text-muted);
+      }
+      .con::after {
+        content: " ";
+        animation: cont 4s linear infinite;
+      }
+      @keyframes cont {
+        0%,
+        100% {
+          content: " ";
+        }
+        10%,
+        90% {
+          content: ".";
+        }
+        20%,
+        80% {
+          content: "..";
+        }
+        30%,
+        70% {
+          content: "...";
+        }
+        40%,
+        60% {
+          content: "....";
+        }
+        50% {
+          content: ".....";
+        }
+      }
+      .footer {
+        background: var(--bg-secondary);
+        color: var(--text-secondary);
+        text-align: center;
+        padding: 2rem;
+        border-top: 2px solid var(--border-color);
+        margin-top: 3rem;
+      }
+      .theme-toggle {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--bg-card);
+        border: 2px solid var(--border-color);
+        color: var(--text-primary);
+        padding: 10px 15px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        z-index: 1000;
+      }
+      .theme-toggle:hover {
+        background: var(--hover-bg);
+        transform: scale(1.05);
+      }
+      @media (max-width: 768px) {
+        .info-section {
+          grid-template-columns: 1fr;
+          padding: 0 1rem;
+        }
+        /* .info-card{
+          width:90%;
+        } */
+        .loader-showcase {
+          flex-direction: column;
+          align-items: center;
+        /* }.loader{
+          height:300px;
+          width:220px; */
+        }
+        .header h1 {
+          font-size: 2rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <button class="theme-toggle" onclick="toggleTheme()">
+      🌓 Toggle Theme
+    </button>
+
+    <div class="notification" id="notification">
+      Code copied to clipboard! ✅
+    </div>
+
+    <div class="header">
+      <h1>Loader Collection</h1>
+      <p class="subtitle">
+        By Elrolas Dev // Interactive Loading Animations Showcase
+      </p>
+    </div>
+
+    <div class="info-section">
+      <div class="info-card">
+        <h3>🎯 Project Purpose</h3>
+        <p>
+          This collection was created to demonstrate various creative loading
+          animation techniques using pure CSS. The goal was to move beyond
+          simple spinners and create engaging, interactive loading experiences
+          that tell a story while users wait.
+        </p>
+        <p>
+          Each loader represents a different approach to visual feedback, from
+          geometric patterns to game-inspired animations that keep users
+          entertained during loading periods.
+        </p>
+      </div>
+
+      <div class="info-card">
+        <h3>🎮 Game Loader Inspiration</h3>
+        <p>
+          The "Destroy the Cube" game loader was inspired by classic arcade
+          breakout games. It simulates a mini-game where blocks slide in from
+          the top and get destroyed by a bouncing ball, controlled by a moving
+          paddle.
+        </p>
+        <ul>
+          <li>Blocks appear after the previous ones disappear</li>
+          <li>The ball follows near-realistic physics-inspired movement(Pure CSS)</li>
+          <li>Paddle animation simulates a human player</li>
+          <li>Satisfying visual feedback</li>
+        </ul>
+      </div>
+
+      <div class="info-card">
+        <h3>🎨 Design Philosophy</h3>
+        <p>These loaders follow modern UI/UX principles:</p>
+        <ul>
+          <li>Smooth, continuous animations to indicate progress</li>
+          <li>Visual hierarchy with clear focal points</li>
+          <li>Consistent color schemes and theming</li>
+          <li>Responsive design for all screen sizes</li>
+          <li>Accessibility-conscious timing and contrast</li>
+        </ul>
+      </div>
+
+      <div class="info-card">
+        <h3>⚡ Technical Features</h3>
+        <p>Built using advanced CSS techniques:</p>
+        <ul>
+          <li>CSS Custom Properties for dynamic theming</li>
+          <li>Complex keyframe animations with multiple stages</li>
+          <li>Transform-based animations for smooth performance</li>
+          <li>Gradient backgrounds and box-shadows for depth</li>
+          <li>Responsive grid layouts and flexbox</li>
+          <li>Hardware-accelerated animations</li>
+        </ul>
+      </div>
+
+      <div class="info-card">
+        <h3>🌟 Animation Techniques</h3>
+        <p>Each loader demonstrates different animation concepts:</p>
+        <ul>
+          <li>
+            <strong>Toshi Gate:</strong> Synchronized beam scaling effects
+          </li>
+          <li><strong>Spinners:</strong> Rotation with border variations</li>
+          <li><strong>Morphing:</strong> Shape transformation and scaling</li>
+          <li><strong>Game Loader:</strong> Multi-element choreography</li>
+        </ul>
+      </div>
+
+      <div class="info-card">
+        <h3>💡 Use Cases</h3>
+        <p>These loaders are perfect for:</p>
+        <ul>
+          <li>Web applications with extended loading times</li>
+          <li>Gaming platforms and interactive experiences</li>
+          <li>Portfolio pieces showcasing CSS animation skills</li>
+          <li>Educational resources for animation learning</li>
+          <li>Brand-specific loading experiences</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="loader-showcase">
+      <div class="body">
+        <button class="copy-button" onclick="copyLoaderCode('toshi')">📋 Copy Code</button>
+        <h2 class="loader-title">Toshi Gate Loader (For Naitoshoo)</h2>
+        <div class="loader">
+          <div class="begin">
+            <div class="start">
+              <div class="top"></div>
+              <div class="bottom"></div>
+              <div class="left"></div>
+              <div class="right"></div>
+            </div>
+          </div>
+          <br /><br /><br />
+          <p>Loading something here <span class="con"></span></p>
+        </div>
+      </div>
+
+      <div class="body">
+        <button class="copy-button" onclick="copyLoaderCode('spinner1')">📋 Copy Code</button>
+        <h2 class="loader-title">Spinner Loader 1</h2>
+        <div class="loader">
+          <div class="begin">
+            <div class="start">
+              <div class="spinner"></div>
+            </div>
+          </div>
+          <br /><br /><br />
+          <p>Loading something here <span class="con"></span></p>
+        </div>
+      </div>
+
+      <div class="body">
+        <button class="copy-button" onclick="copyLoaderCode('spinner2')">📋 Copy Code</button>
+        <h2 class="loader-title">Spinner Loader 2</h2>
+        <div class="loader">
+          <div class="begin">
+            <div class="start">
+              <div class="spinner2"></div>
+            </div>
+          </div>
+          <br /><br /><br />
+          <p>Loading something here <span class="con"></span></p>
+        </div>
+      </div>
+
+      <div class="body">
+        <button class="copy-button" onclick="copyLoaderCode('spinner3')">📋 Copy Code</button>
+        <h2 class="loader-title">Spinner Loader 3</h2>
+        <div class="loader">
+          <div class="begin">
+            <div class="start">
+              <div class="spinner3"></div>
+            </div>
+          </div>
+          <br /><br /><br />
+          <p>Loading something here <span class="con"></span></p>
+        </div>
+      </div>
+
+      <div class="body">
+        <button class="copy-button" onclick="copyLoaderCode('morphing')">📋 Copy Code</button>
+        <h2 class="loader-title">Morphing Spinner</h2>
+        <div class="loader">
+          <div class="begin">
+            <div class="start">
+              <div class="spinner4"></div>
+            </div>
+          </div>
+          <br /><br /><br />
+          <p>Loading something here <span class="con"></span></p>
+        </div>
+      </div>
+
+      <div class="body">
+        <button class="copy-button" onclick="copyLoaderCode('game')">📋 Copy Code</button>
+        <h2 class="loader-title">Game (Destroy the Cube) Loader</h2>
+        <div class="loader">
+          <div class="begin">
+            <div class="start">
+              <div class="spinner5">
+                <!-- blocks that will get destroyed by ball -->
+                <div class="block1 b1"></div>
+                <div class="block2 b2"></div>
+                <div class="block1 b3"></div>
+                <div class="block2 b4"></div>
+                <!-- powerup -->
+                <div class="pup"></div>
+                <!-- player ball and paddle base -->
+                <div class="player"></div>
+                <div class="base"></div>
+              </div>
+            </div>
+          </div>
+          <br /><br /><br />
+          <p>Loading something here <span class="con"></span></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>
+        &copy; 2024 Elrolas Dev. Created with passion for interactive design and
+        smooth animations.
+      </p>
+      <p>
+        Feel free to use these loaders in your projects. And please don't forget
+        to credit the creator(Elrolas)!
+        More loader animations will come in.
+      </p>
+    </div>
+
+    <script>
+      // Loader code templates
+      const loaderCodes = {
+        toshi: {
+          html: `<div class="toshi-loader">
+  <div class="toshi-container">
+    <div class="top-beam"></div>
+    <div class="bottom-beam"></div>
+    <div class="left-beam"></div>
+    <div class="right-beam"></div>
+  </div>
+  <p>Loading<span class="dots"></span></p>
+</div>`,
+          css: `/* Toshi Gate Loader */
+.toshi-loader {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.toshi-container {
+  width: 70px;
+  height: 70px;
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.top-beam {
+  position: absolute;
+  top: 15px;
+  left: -5px;
+  width: 80px;
+  height: 6px;
+  background: linear-gradient(135deg, #f30000, #ff4444);
+  border-radius: 3px;
+  animation: slideBeam 4s ease infinite;
+}
+
+.bottom-beam {
+  position: absolute;
+  top: 35px;
+  left: 5px;
+  width: 60px;
+  height: 6px;
+  background: linear-gradient(135deg, #f30000, #ff4444);
+  border-radius: 3px;
+  animation: slideBeam1 4s ease infinite;
+}
+
+.left-beam {
+  position: absolute;
+  background: linear-gradient(135deg, #f30000, #ff4444);
+  animation: sideBeam1 4s ease infinite;
+  width: 6px;
+  height: 60px;
+  border-radius: 3px;
+  left: 20px;
+  top: 19px;
+  transform-origin: top;
+}
+
+.right-beam {
+  position: absolute;
+  background: linear-gradient(135deg, #f30000, #ff4444);
+  animation: sideBeam2 4s ease infinite;
+  right: 20px;
+  top: 19px;
+  width: 6px;
+  height: 60px;
+  border-radius: 2px;
+  transform-origin: top;
+}
+
+@keyframes slideBeam {
+  0%, 10%, 90%, 100% {
+    opacity: 0.3;
+    transform: scaleX(0.2);
+  }
+  40%, 60% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes slideBeam1 {
+  0%, 20%, 80%, 100% {
+    transform: scaleX(0.2);
+    opacity: 0.3;
+  }
+  43%, 57% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes sideBeam1 {
+  0%, 30%, 70%, 100% {
+    transform: scaleY(0.2);
+    opacity: 0.3;
+  }
+  46%, 54% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+@keyframes sideBeam2 {
+  0%, 40%, 60%, 100% {
+    transform: scaleY(0.2);
+    opacity: 0.3;
+  }
+  49%, 51% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+.dots::after {
+  content: " ";
+  animation: dots 4s linear infinite;
+}
+
+@keyframes dots {
+  0%, 100% { content: " "; }
+  10%, 90% { content: "."; }
+  20%, 80% { content: ".."; }
+  30%, 70% { content: "..."; }
+  40%, 60% { content: "...."; }
+  50% { content: "....."; }
+}`
+        },
+
+        spinner1: {
+          html: `<div class="spinner-loader">
+  <div class="spinner"></div>
+  <p>Loading<span class="dots"></span></p>
+</div>`,
+          css: `/* Spinner Loader 1 */
+.spinner-loader {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.spinner {
+  height: 70px;
+  width: 70px;
+  border: 5px solid #333333;
+  border-radius: 50%;
+  border-right: 5px solid #f30000;
+  animation: spin 1s linear infinite;
+  margin-bottom: 2rem;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.dots::after {
+  content: " ";
+  animation: dots 4s linear infinite;
+}
+
+@keyframes dots {
+  0%, 100% { content: " "; }
+  10%, 90% { content: "."; }
+  20%, 80% { content: ".."; }
+  30%, 70% { content: "..."; }
+  40%, 60% { content: "...."; }
+  50% { content: "....."; }
+}`
+        },
+
+        spinner2: {
+          html: `<div class="spinner-loader">
+  <div class="spinner2"></div>
+  <p>Loading<span class="dots"></span></p>
+</div>`,
+          css: `/* Spinner Loader 2 */
+.spinner-loader {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.spinner2 {
+  height: 70px;
+  width: 70px;
+  border: 5px solid #333333;
+  border-radius: 50%;
+  border-right: 5px dashed #f30000;
+  animation: spin 1s linear infinite;
+  margin-bottom: 2rem;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.dots::after {
+  content: " ";
+  animation: dots 4s linear infinite;
+}
+
+@keyframes dots {
+  0%, 100% { content: " "; }
+  10%, 90% { content: "."; }
+  20%, 80% { content: ".."; }
+  30%, 70% { content: "..."; }
+  40%, 60% { content: "...."; }
+  50% { content: "....."; }
+}`
+        },
+
+        spinner3: {
+          html: `<div class="spinner-loader">
+  <div class="spinner3"></div>
+  <p>Loading<span class="dots"></span></p>
+</div>`,
+          css: `/* Spinner Loader 3 */
+.spinner-loader {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.spinner3 {
+  height: 70px;
+  width: 70px;
+  border: 5px solid #333333;
+  border-radius: 50%;
+  border-right: 8px double #f30000;
+  animation: spin 1s linear infinite;
+  margin-bottom: 2rem;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.dots::after {
+  content: " ";
+  animation: dots 4s linear infinite;
+}
+
+@keyframes dots {
+  0%, 100% { content: " "; }
+  10%, 90% { content: "."; }
+  20%, 80% { content: ".."; }
+  30%, 70% { content: "..."; }
+  40%, 60% { content: "...."; }
+  50% { content: "....."; }
+}`
+        },
+
+        morphing: {
+          html: `<div class="morphing-loader">
+  <div class="morphing-spinner"></div>
+  <p>Loading<span class="dots"></span></p>
+</div>`,
+          css: `/* Morphing Spinner */
+.morphing-loader {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.morphing-spinner {
+  height: 70px;
+  width: 70px;
+  background-color: #1e1e1e;
+  border: 5px solid #333333;
+  border-radius: 10%;
+  animation: morphSpin 4s linear infinite;
+  margin-bottom: 2rem;
+}
+
+@keyframes morphSpin {
+  0%, 100% {
+    border-radius: 50%;
+    transform: rotate(0);
+    scale: 100%;
+    border-right: 5px solid #f30000;
+    border-left: 5px solid #333333;
+    border-top: 5px solid #333333;
+    border-bottom: 5px solid #333333;
+  }
+  25% {
+    border-radius: 10%;
+    transform: rotate(360deg);
+    scale: 100%;
+    border-right: 5px solid #333333;
+    border-left: 5px solid #333333;
+    border-top: 5px solid #333333;
+    border-bottom: 5px solid #f30000;
+  }
+  50% {
+    border-radius: 25%;
+    transform: rotate(0);
+    scale: 130%;
+    border-right: 5px solid #333333;
+    border-left: 5px solid #f30000;
+    border-top: 5px solid #333333;
+    border-bottom: 5px solid #333333;
+  }
+  75% {
+    border-radius: -50%;
+    transform: rotate(-360deg);
+    scale: 100%;
+    border-right: 5px solid #333333;
+    border-left: 5px solid #333333;
+    border-top: 5px solid #f30000;
+    border-bottom: 5px solid #333333;
+  }
+}
+
+.dots::after {
+  content: " ";
+  animation: dots 4s linear infinite;
+}
+
+@keyframes dots {
+  0%, 100% { content: " "; }
+  10%, 90% { content: "."; }
+  20%, 80% { content: ".."; }
+  30%, 70% { content: "..."; }
+  40%, 60% { content: "...."; }
+  50% { content: "....."; }
+}`
+        },
+
+        game: {
+          html: `<div class="game-loader">
+  <div class="game-container">
+    <!-- Blocks that get destroyed -->
+    <div class="block b1"></div>
+    <div class="block b2"></div>
+    <div class="block b3"></div>
+    <div class="block b4"></div>
+    <!-- Power-up -->
+    <div class="powerup"></div>
+    <!-- Ball and paddle -->
+    <div class="ball"></div>
+    <div class="paddle"></div>
+  </div>
+  <p>Loading<span class="dots"></span></p>
+</div>`,
+          css: `/* Game (Destroy the Cube) Loader */
+.game-loader {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.game-container {
+  position: relative;
+  height: 120px;
+  width: 120px;
+  background-color: #1e1e1e;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.block {
+  background: #f30000;
+  width: 15px;
+  height: 15px;
+  border-radius: 3px;
+  position: absolute;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.b1 {
+  animation: blockSlideIn1 4s linear infinite;
+}
+
+.b2 {
+  top: 10%;
+  left: 10%;
+  animation: blockSlideIn2 4s linear infinite;
+}
+
+.b3 {
+  left: 77%;
+  top: 20%;
+  animation: blockSlideIn3 4s linear infinite;
+}
+
+.b4 {
+  left: 40%;
+  top: 50%;
+  animation: blockSlideIn4 4s linear infinite;
+}
+
+.ball {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  position: absolute;
+  z-index: 10;
+  height: 12px;
+  width: 12px;
+  background: linear-gradient(135deg, #f1c500, #ffd700);
+  border-radius: 50%;
+  animation: ballBounce 4s linear infinite;
+}
+
+.paddle {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  border-left: 4px solid #27ae60;
+  border-right: 4px solid #27ae60;
+  position: absolute;
+  top: 90%;
+  height: 8px;
+  width: 50px;
+  background-color: #333333;
+  border-radius: 4px;
+  animation: paddleMove 4s linear infinite;
+}
+
+.powerup {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  border: 3px solid #27ae60;
+  border-radius: 50%;
+  animation: powerup 4s linear infinite;
+  position: absolute;
+  z-index: 10;
+  height: 13px;
+  width: 13px;
+}
+
+@keyframes blockSlideIn1 {
+  0% { opacity: 1; top: 40%; left: 20%; }
+  5% { opacity: 1; top: 40%; left: 20%; }
+  9% { opacity: 1; top: 40%; left: 20%; }
+  10% { opacity: 0; top: 40%; left: 20%; }
+  100% { opacity: 0; top: 40%; left: 20%; }
+}
+
+@keyframes blockSlideIn2 {
+  0%, 9% { opacity: 0; }
+  10% { opacity: 1; }
+  29% { opacity: 1; }
+  30% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes blockSlideIn3 {
+  0%, 30% { opacity: 0; }
+  31%, 59% { opacity: 1; }
+  60% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes blockSlideIn4 {
+  0%, 60% { opacity: 0; }
+  61%, 90% { opacity: 1; }
+  91%, 100% { opacity: 0; }
+}
+
+@keyframes ballBounce {
+  0%, 100% { left: 10%; top: 80%; }
+  10% { top: 50%; }
+  20% { top: 80%; left: 55%; }
+  30% { top: 20%; left: 10%; }
+  35% { top: 50%; left: 0; }
+  50% { left: 50%; top: 80%; }
+  60% { left: 77%; top: 30%; }
+  70% { left: 90%; top: 50%; }
+  80% { left: 70%; top: 80%; }
+  90% { left: 40%; top: 60%; }
+}
+
+@keyframes paddleMove {
+  0%, 100% { left: 0; }
+  10% { left: 35%; }
+  20% { left: 40%; }
+  30% { left: 3%; }
+  35% { left: 1%; }
+  50% { left: 44%; }
+  60% { left: 0; }
+  70% { left: 59%; }
+  80% { left: 53%; }
+  90% { left: 36%; }
+}
+
+@keyframes powerup {
+  0%, 100% { opacity: 0; top: -200px; left: 5px; }
+  10% { opacity: 1; top: -20px; left: 5px; }
+  60% { opacity: 1; left: 5px; top: 82%; }
+  61% { opacity: 0; left: 5px; top: 82%; }
+}
+
+.dots::after {
+  content: " ";
+  animation: dots 4s linear infinite;
+}
+
+@keyframes dots {
+  0%, 100% { content: " "; }
+  10%, 90% { content: "."; }
+  20%, 80% { content: ".."; }
+  30%, 70% { content: "..."; }
+  40%, 60% { content: "...."; }
+  50% { content: "....."; }
+}`
+        }
+      };
+
+      function copyLoaderCode(loaderType) {
+        const loader = loaderCodes[loaderType];
+        const fullCode = `<!-- ${loaderType.toUpperCase()} LOADER HTML -->\n${loader.html}\n\n/* ${loaderType.toUpperCase()} LOADER CSS */\n${loader.css}`;
+        
+        navigator.clipboard.writeText(fullCode).then(() => {
+          showNotification();
+          
+          // Update button state
+          const button = event.target;
+          const originalText = button.textContent;
+          button.textContent = '✅ Copied!';
+          button.classList.add('copied');
+          
+          setTimeout(() => {
+            button.textContent = originalText;
+            button.classList.remove('copied');
+          }, 2000);
+        }).catch(err => {
+          console.error('Failed to copy code: ', err);
+          // Fallback for older browsers
+          fallbackCopyTextToClipboard(fullCode);
+        });
+      }
+
+      function fallbackCopyTextToClipboard(text) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.top = "0";
+        textArea.style.left = "0";
+        textArea.style.position = "fixed";
+        
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {
+          document.execCommand('copy');
+          showNotification();
+        } catch (err) {
+          console.error('Fallback: Could not copy text: ', err);
+        }
+        
+        document.body.removeChild(textArea);
+      }
+
+      function showNotification() {
+        const notification = document.getElementById('notification');
+        notification.classList.add('show');
+        
+        setTimeout(() => {
+          notification.classList.remove('show');
+        }, 3000);
+      }
+
+      function toggleTheme() {
+        document.body.classList.toggle("lightmode");
+        const button = document.querySelector(".theme-toggle");
+        if (document.body.classList.contains("lightmode")) {
+          button.textContent = "🌙 Dark Mode";
+        } else {
+          button.textContent = "☀️ Light Mode";
+        }
+      }
+
+      // Initialize theme button text
+      document.addEventListener("DOMContentLoaded", function () {
+        const button = document.querySelector(".theme-toggle");
+        button.textContent = "☀️ Light Mode";
+      });
+    </script>
+  </body>
+</html>
